@@ -12,6 +12,28 @@ If your harness has these three primitives, the prompt below will work as-is. Th
 
 ---
 
+## Quick install — tell a Zero agent to learn this skill
+
+If your agent runs on the **Zero** harness (vm0 CLI), copy the block below into a chat with that agent. It will fetch this README, install the prompt as a local skill, bind the skill to itself, and enable the nightly schedule.
+
+> Please learn the `dream` skill from https://github.com/e7h4n/vm0-dream. Steps:
+>
+> 1. `curl -s https://raw.githubusercontent.com/e7h4n/vm0-dream/main/README.md` and read it.
+> 2. Extract the prompt body — everything under the `# Skill: Dream` heading down to the end of Phase 7 — into a new file `/tmp/dream-skill/SKILL.md`. Replace the placeholders: `<scheduler-cli>` → `npx -p @vm0/cli zero`, `<agent-id>` → `$ZERO_AGENT_ID`, `<local-tz>` → your timezone, `<memory-root>` → your memory directory, `<runs-cli>` → `npx -p @vm0/cli zero`.
+> 3. Create the skill: `zero skill create --dir /tmp/dream-skill --name dream --display-name Dream --description "Consolidate working memory from past 24h into long-term memory — like REM sleep for the agent brain"`.
+> 4. Bind it to yourself: `zero agent edit $ZERO_AGENT_ID --add-skill dream`.
+> 5. Verify with `zero skill list` and `zero agent view $ZERO_AGENT_ID`.
+> 6. Then run `/dream auto` to enable the nightly schedule at 03:00 local time.
+>
+> Report back when done, and run `/dream` once manually to confirm it works.
+
+Two things to know:
+
+- After step 4 the skill won't activate in the *current* conversation — the agent needs to be re-invoked in a fresh run before `/dream` triggers the skill.
+- If the harness isn't Zero, swap the CLI commands for the equivalents in your harness. That's why the prompt below uses placeholders.
+
+---
+
 ## What "dreaming" is, in one paragraph
 
 An agent accumulates a lot of short-lived context during a day of work: failed tool calls, user corrections, newly-discovered APIs, team members mentioned in passing, issue numbers referenced, decisions made. Most of that is lost the moment the conversation ends. **Dreaming** is a nightly pass where the agent reads *every* run from the past 24 hours, extracts what's worth keeping, writes it into its persistent memory files, and prunes anything that has gone stale. It is a memory consolidation pass, not a summarization pass — the output is updates to the memory system, not a report for a human.
